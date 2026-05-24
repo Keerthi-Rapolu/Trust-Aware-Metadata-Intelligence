@@ -4,7 +4,7 @@
 ![Streamlit](https://img.shields.io/badge/demo-Streamlit-red)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-> A deterministic metadata reasoning system that decides whether to generate SQL, refuse a query, or block execution — before calling an LLM.
+> A deterministic metadata reasoning system for **SQL generation**, **safe refusal**, and **governance blocking** — before calling an LLM.
 
 This project focuses on trustworthy enterprise text-to-SQL orchestration using semantic metadata retrieval, governance-aware planning, confidence propagation, and explainable reasoning.
 
@@ -37,6 +37,20 @@ This project explores a different approach:
 > **Deterministic metadata reasoning before LLM generation.**
 
 The system evaluates semantic retrieval, join validity, governance constraints, ambiguity detection, and confidence propagation before deciding whether SQL generation is allowed.
+
+---
+
+## Why Pure RAG Is Insufficient
+
+Embedding similarity alone cannot reliably determine:
+
+- valid join paths between tables
+- metric ambiguity across business definitions
+- governance safety for restricted models or PII columns
+- warehouse cost risk from unsafe scan patterns
+- semantic conflicts between overlapping terms
+
+This system introduces deterministic metadata reasoning before SQL generation to constrain unsafe or ambiguous outputs — going beyond what retrieval similarity can provide.
 
 ---
 
@@ -196,15 +210,15 @@ Instead, it focuses on:
 ```
 Trust-Aware-Metadata-Intelligence/
 │
-├── evaluation/         # Benchmark runner and failure taxonomy tests
-├── frontend/           # Streamlit reasoning demo
-├── governance/         # PII detector, RBAC validator, cost estimator
 ├── ingestion/          # Manifest ingestor, lineage parser, graph store
 ├── reasoning/          # Query planner, entity extractor, confidence scorer
 ├── retrieval/          # Embedding ranker, glossary matcher, lineage scorer
 ├── generation/         # SQL generator, refusal engine
+├── governance/         # PII detector, RBAC validator, cost estimator
 ├── explainability/     # Explanation formatter
-├── agents/             # Agent orchestrator and module agents
+├── evaluation/         # Benchmark runner and failure taxonomy tests
+├── frontend/           # Streamlit reasoning demo
+├── agents/             # Optional sequential orchestration layer
 ├── docs/               # Design references and architecture docs
 └── tests/              # Full test suite (439 passing)
 ```
@@ -226,7 +240,7 @@ Current synthetic benchmark baseline:
 | Governance Recall | 1.00 |
 | Unsafe Recall | 1.00 |
 
-**439 tests passing** across ingestion, reasoning, retrieval, governance, generation, explainability, agents, and evaluation modules.
+**439 tests passing** across ingestion, reasoning, retrieval, governance, generation, explainability, and evaluation modules.
 
 ---
 
@@ -280,15 +294,15 @@ pytest -q
 
 ## Research Direction
 
-This project explores trustworthy enterprise AI, metadata intelligence, semantic reasoning systems, governance-aware orchestration, explainable SQL planning, and confidence-aware AI systems.
+This project explores how enterprise text-to-SQL systems can become more trustworthy through:
 
-Future directions include:
+- deterministic metadata reasoning
+- semantic ambiguity detection
+- governance-aware planning
+- confidence-aware orchestration
+- constrained SQL generation
 
-- dbt manifest ingestion
-- metadata graph traversal
-- enterprise lineage reasoning
-- semantic join inference
-- warehouse observability integration
+Future directions include dbt manifest ingestion, enterprise lineage reasoning, semantic join inference, and warehouse observability integration.
 
 ---
 
