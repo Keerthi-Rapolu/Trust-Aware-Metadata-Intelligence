@@ -1,5 +1,9 @@
 # Trust-Aware Metadata Reasoning
 
+![Tests](https://img.shields.io/badge/tests-439%20passing-brightgreen)
+![Streamlit](https://img.shields.io/badge/demo-Streamlit-red)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 > A deterministic metadata reasoning system that decides whether to generate SQL, refuse a query, or block execution — before calling an LLM.
 
 This project focuses on trustworthy enterprise text-to-SQL orchestration using semantic metadata retrieval, governance-aware planning, confidence propagation, and explainable reasoning.
@@ -148,22 +152,22 @@ Intent Clarity       1.00  ██████████
 
 ## Architecture
 
-```
-User Query
-    ↓
-Intent Extraction
-    ↓
-Metadata Retrieval
-    ↓
-Join Path Reasoning
-    ↓
-Ambiguity Detection
-    ↓
-Governance Validation
-    ↓
-Confidence Propagation
-    ↓
-SQL Generation / Refusal / Block
+```mermaid
+flowchart TD
+    A[User Query] --> B[Intent Extraction]
+    B --> C[Semantic Metadata Retrieval]
+    C --> D[Join Path Reasoning]
+    D --> E[Ambiguity Detection]
+    E --> F[Governance Validation]
+    F --> G[Confidence Propagation]
+
+    G -->|High Confidence| H[Constrained SQL Generation]
+    G -->|Insufficient Metadata| I[Safe Refusal]
+    G -->|Governance Risk| J[Governance Block]
+
+    H --> K[SQL Output]
+    I --> L[Refusal Explanation]
+    J --> M[Blocked Explanation]
 ```
 
 ---
@@ -301,6 +305,19 @@ This project asks:
 > **Should the system generate SQL at all?**
 
 That distinction is the foundation of this architecture.
+
+```mermaid
+flowchart LR
+    A[Conventional Text-to-SQL] --> B[Retrieve Similar Schema]
+    B --> C[LLM Generates SQL]
+    C --> D[Possible Hallucination]
+
+    E[This Project] --> F[Metadata Reasoning]
+    F --> G[Governance + Confidence Checks]
+    G --> H{Should SQL be generated?}
+    H -->|Yes| I[Generate SQL]
+    H -->|No| J[Refuse or Block]
+```
 
 ---
 
