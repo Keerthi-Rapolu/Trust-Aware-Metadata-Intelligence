@@ -232,8 +232,6 @@ Current synthetic benchmark baseline:
 
 ## Demo
 
-Live demo: **[https://trust-aware-metadata-intelligence.streamlit.app/](https://trust-aware-metadata-intelligence.streamlit.app/)**
-
 The project includes a single-page Streamlit reasoning demo that shows SQL generation, safe refusal behavior, governance blocking, confidence propagation, metadata grounding, and join reasoning — without exposing raw orchestration complexity.
 
 ```bash
