@@ -20,6 +20,8 @@ Try the hosted demo:
 
 **[https://trust-aware-metadata-intelligence.streamlit.app/](https://trust-aware-metadata-intelligence.streamlit.app/)**
 
+*Add hero screenshot here.*
+
 ---
 
 ## Why This Exists
@@ -36,7 +38,7 @@ This project explores a different approach:
 
 > **Deterministic metadata reasoning before LLM generation.**
 
-The system evaluates semantic retrieval, join validity, governance constraints, ambiguity detection, and confidence propagation before deciding whether SQL generation is allowed.
+The system evaluates semantic retrieval, join validity, governance constraints, ambiguity detection, and confidence propagation before deciding whether SQL generation is safe and semantically justified.
 
 ---
 
@@ -164,6 +166,25 @@ Intent Clarity       1.00  ██████████
 
 ---
 
+## Failure Taxonomy
+
+The system recognises eight distinct failure types, evaluated in priority order:
+
+| Failure Type | Trigger |
+|---|---|
+| `GOVERNANCE_BLOCKED` | Restricted model access, PII exposure, or unsafe scan pattern |
+| `UNSAFE_QUERY` | Query matches known destructive or exfiltration patterns |
+| `INSUFFICIENT_SCHEMA` | Required metadata entities not found in the graph |
+| `WEAK_JOIN` | No valid join path exists between resolved tables |
+| `SEMANTIC_CONFLICT` | Multiple conflicting metric definitions for the same term |
+| `AMBIGUOUS_JOIN` | Multiple plausible join paths with no clear winner |
+| `TEMPORAL_AMBIGUITY` | Time range or date filter cannot be resolved |
+| `LOW_CONFIDENCE` | Confidence propagation falls below the generation threshold |
+
+Each failure produces a structured explanation surfaced in the UI and included in evaluation metrics.
+
+---
+
 ## Architecture
 
 ```mermaid
@@ -241,6 +262,8 @@ Current synthetic benchmark baseline:
 | Unsafe Recall | 1.00 |
 
 **439 tests passing** across ingestion, reasoning, retrieval, governance, generation, explainability, and evaluation modules.
+
+> The benchmark suite intentionally prioritizes trustworthy refusal behavior and governance enforcement over unconstrained SQL generation — which explains the strong Refusal Recall and Governance Recall scores relative to Overall Accuracy.
 
 ---
 
