@@ -4,14 +4,17 @@
 
 This project focuses on trustworthy enterprise text-to-SQL orchestration using semantic metadata retrieval, governance-aware planning, confidence propagation, and explainable reasoning.
 
-Unlike conventional RAG SQL systems, this platform separates:
+Unlike conventional RAG SQL systems, this platform separates metadata reasoning, semantic validation, governance enforcement, and confidence evaluation from final SQL generation.
 
-- metadata reasoning
-- semantic validation
-- governance enforcement
-- confidence evaluation
+> **This is a research-grade prototype, not a production database gateway.**
 
-from final SQL generation.
+---
+
+## Live Demo
+
+Try the hosted demo:
+
+**[https://trust-aware-metadata-intelligence.streamlit.app/](https://trust-aware-metadata-intelligence.streamlit.app/)**
 
 ---
 
@@ -187,7 +190,7 @@ Instead, it focuses on:
 ## Repository Structure
 
 ```
-enterprise-metadata-intelligence/
+Trust-Aware-Metadata-Intelligence/
 │
 ├── evaluation/         # Benchmark runner and failure taxonomy tests
 ├── frontend/           # Streamlit reasoning demo
@@ -199,7 +202,7 @@ enterprise-metadata-intelligence/
 ├── explainability/     # Explanation formatter
 ├── agents/             # Agent orchestrator and module agents
 ├── docs/               # Design references and architecture docs
-└── tests/              # Full test suite
+└── tests/              # Full test suite (439 passing)
 ```
 
 ---
@@ -219,13 +222,15 @@ Current synthetic benchmark baseline:
 | Governance Recall | 1.00 |
 | Unsafe Recall | 1.00 |
 
+**439 tests passing** across ingestion, reasoning, retrieval, governance, generation, explainability, agents, and evaluation modules.
+
 ---
 
 ## Demo
 
-The project includes a single-page Streamlit reasoning demo.
+Live demo: **[https://trust-aware-metadata-intelligence.streamlit.app/](https://trust-aware-metadata-intelligence.streamlit.app/)**
 
-The demo shows SQL generation, safe refusal behavior, governance blocking, confidence propagation, metadata grounding, and join reasoning — without exposing raw orchestration complexity.
+The project includes a single-page Streamlit reasoning demo that shows SQL generation, safe refusal behavior, governance blocking, confidence propagation, metadata grounding, and join reasoning — without exposing raw orchestration complexity.
 
 ```bash
 streamlit run app.py
