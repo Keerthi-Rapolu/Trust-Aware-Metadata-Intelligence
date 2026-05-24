@@ -134,35 +134,47 @@ Intent Clarity       1.00  ██████████
 
 ---
 
-## Example Scenarios
+## Enterprise Reasoning Scenarios
 
-### Safe SQL Generation
+### Semantic Metric Ambiguity
 
-| Query | `show segment data` |
-|-------|---------------------|
-| Decision | **SAFE SQL GENERATED** |
-| Confidence | 0.80 |
+Enterprise warehouses often contain multiple competing business definitions for the same metric. When a query targets an ambiguous term, selecting one definition arbitrarily is a correctness failure — not a reasonable default.
 
-### Semantic Conflict Detection
+```
+show revenue by region
+```
 
-| Query | `show revenue by region` |
-|-------|--------------------------|
-| Decision | **SAFE REFUSAL** |
-| Reason | Multiple revenue definitions detected. |
+The system detects that `revenue` maps to multiple semantic definitions: `revenue_gross` and `revenue_net`. Instead of selecting one arbitrarily, the planner triggers a structured refusal and requests clarification before SQL generation proceeds.
 
-### Insufficient Schema Detection
+### Governance-Constrained Planning
 
-| Query | `show me the xyz_metric_zz99` |
-|-------|-------------------------------|
-| Decision | **SAFE REFUSAL** |
-| Reason | No recognised metadata entities found. |
+Analytical queries may target restricted models, expose PII columns, or trigger unsafe warehouse scan patterns. The governance layer evaluates all three dimensions before generation is approved.
 
-### Governance Blocking
+```
+show all payments
+```
 
-| Query | `show all payments` |
-|-------|---------------------|
-| Decision | **GOVERNANCE BLOCK** |
-| Reason | Restricted model access + unsafe scan pattern detected. |
+The governance layer detects restricted model access, potential PII exposure, and unbounded scan risk on `payment_events`. SQL generation is blocked before execution and a structured explanation is returned.
+
+### Insufficient Metadata Grounding
+
+When metadata entities cannot be confidently grounded in the knowledge graph, the planner refuses generation rather than hallucinating columns or fabricating join paths.
+
+```
+show me xyz_metric_zz99
+```
+
+No semantic metadata match exists in the graph. The planner returns `INSUFFICIENT_SCHEMA` with confidence `0.00` and a structured refusal explanation — no SQL is attempted.
+
+### Confidence-Constrained SQL Generation
+
+SQL generation is only approved when metadata retrieval succeeds, governance checks pass, join reasoning resolves cleanly, and confidence propagation exceeds the generation threshold across all components.
+
+```
+show segment data
+```
+
+The planner resolves the query to a single grounded metadata model (`dim_customer`) with no governance flags, no ambiguity, and a clean join path. Constrained SQL generation is approved at confidence `0.80`.
 
 ---
 
