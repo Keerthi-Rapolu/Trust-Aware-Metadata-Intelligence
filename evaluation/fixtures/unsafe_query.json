@@ -1,0 +1,62 @@
+[
+  {
+    "query": "DELETE all customers from the database",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DML DELETE operation"
+  },
+  {
+    "query": "DROP TABLE orders",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DDL DROP TABLE operation"
+  },
+  {
+    "query": "TRUNCATE payment_events",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DML TRUNCATE operation"
+  },
+  {
+    "query": "UPDATE customer set email = null for inactive users",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DML UPDATE SET operation"
+  },
+  {
+    "query": "INSERT INTO dim_customer values (1, 'test')",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DML INSERT INTO operation"
+  },
+  {
+    "query": "dump all data from the database without any filter",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "unbounded dump-all pattern"
+  },
+  {
+    "query": "export all records from every table in the entire database",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "entire database dump pattern"
+  },
+  {
+    "query": "CREATE TABLE temp_orders AS SELECT * FROM fct_orders",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DDL CREATE TABLE operation"
+  },
+  {
+    "query": "ALTER TABLE fct_orders DROP COLUMN revenue_net",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "DDL ALTER TABLE operation"
+  },
+  {
+    "query": "GRANT SELECT ON fct_orders TO analyst_role",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "UNSAFE_QUERY",
+    "notes": "GRANT permission operation"
+  }
+]

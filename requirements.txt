@@ -1,4 +1,5 @@
 chromadb
+networkx
 pandas
-requests
-python-dotenv
+pytest
+streamlit

@@ -1,0 +1,32 @@
+[
+  {
+    "query": "show revenue by region",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue fires SEMANTIC_CONFLICT before join can be evaluated; region is single-column but revenue conflict takes priority"
+  },
+  {
+    "query": "revenue and payment analysis",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment entity → pci-tagged model → GOVERNANCE_BLOCKED fires before join ambiguity"
+  },
+  {
+    "query": "show escalation data with payment info",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment entity triggers governance block; illustrates governance priority over join ambiguity"
+  },
+  {
+    "query": "escalation and payment trends",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "governance blocks before join path can be evaluated"
+  },
+  {
+    "query": "region and segment cross-analysis without specifying model",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "region+segment both map to dim_customer (same model) → single model, no join needed, no conflict"
+  }
+]

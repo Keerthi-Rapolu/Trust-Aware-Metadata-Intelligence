@@ -1,5 +1,0 @@
-left_table,left_column,right_table,right_column,relationship
-sales.orders_fact,customer_id,customer.customer_dim,customer_id,many_to_one
-sales.order_items_fact,order_id,sales.orders_fact,order_id,many_to_one
-support.customer_support_tickets,customer_id,customer.customer_dim,customer_id,many_to_one
-health.appointments_fact,patient_id,health.patient_dim,patient_id,many_to_one

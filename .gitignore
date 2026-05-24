@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment / secrets
+.env
+
+# Vector store (local state only)
+chroma_store/
+
+# Logs
+*.log
+streamlit.log
+streamlit.err.log
+
+# Old prototype data files (replaced by data/sample_manifest.json)
+data/metadata.csv
+data/relationships.csv
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

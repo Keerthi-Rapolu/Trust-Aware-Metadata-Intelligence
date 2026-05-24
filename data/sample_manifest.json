@@ -1,0 +1,300 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v9/manifest.json",
+    "dbt_version": "1.7.0",
+    "generated_at": "2025-05-24T00:00:00.000000Z",
+    "invocation_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "env": {}
+  },
+  "nodes": {
+    "model.analytics.dim_customer": {
+      "unique_id": "model.analytics.dim_customer",
+      "name": "dim_customer",
+      "resource_type": "model",
+      "description": "Enterprise customer dimension. Source of truth for all customer attributes.",
+      "columns": {
+        "customer_id": {
+          "name": "customer_id",
+          "description": "Unique enterprise customer identifier. Primary key.",
+          "data_type": "integer",
+          "meta": {"pii": false},
+          "tags": []
+        },
+        "segment": {
+          "name": "segment",
+          "description": "Customer market segment. Values: enterprise, mid-market, smb.",
+          "data_type": "varchar",
+          "meta": {},
+          "tags": []
+        },
+        "region": {
+          "name": "region",
+          "description": "Customer geographic region. Values: AMER, EMEA, APAC.",
+          "data_type": "varchar",
+          "meta": {},
+          "tags": []
+        },
+        "email_address": {
+          "name": "email_address",
+          "description": "Customer email address for communications.",
+          "data_type": "varchar",
+          "meta": {"pii": true, "pii_type": "email"},
+          "tags": ["pii", "personal_data"]
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "description": "Customer phone number.",
+          "data_type": "varchar",
+          "meta": {"pii": true, "pii_type": "phone"},
+          "tags": ["pii", "personal_data"]
+        }
+      },
+      "depends_on": {"nodes": []},
+      "tags": ["gold", "dimensions"],
+      "meta": {"owner": "analytics_team", "domain": "sales", "estimated_scan_gb": 8, "partition_column": null, "partition_grain": null},
+      "fqn": ["analytics", "dim_customer"],
+      "schema": "analytics",
+      "database": "warehouse"
+    },
+
+    "model.analytics.fct_orders": {
+      "unique_id": "model.analytics.fct_orders",
+      "name": "fct_orders",
+      "resource_type": "model",
+      "description": "Core orders fact table. Grain: one row per order.",
+      "columns": {
+        "order_id": {
+          "name": "order_id",
+          "description": "Unique order identifier. Primary key.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "description": "Foreign key to dim_customer. Enterprise customer identifier.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "revenue_gross": {
+          "name": "revenue_gross",
+          "description": "Total billed amount before deductions. Finance definition of revenue.",
+          "data_type": "numeric",
+          "meta": {"domain": "finance"},
+          "tags": ["finance", "revenue"]
+        },
+        "revenue_net": {
+          "name": "revenue_net",
+          "description": "Billed amount after discounts and returns. Sales definition of revenue.",
+          "data_type": "numeric",
+          "meta": {"domain": "sales"},
+          "tags": ["sales", "revenue"]
+        },
+        "order_date": {
+          "name": "order_date",
+          "description": "Date the order was placed.",
+          "data_type": "date",
+          "meta": {},
+          "tags": []
+        }
+      },
+      "depends_on": {"nodes": ["model.analytics.dim_customer"]},
+      "tags": ["gold", "facts", "finance"],
+      "meta": {"owner": "analytics_team", "domain": "sales", "estimated_scan_gb": 120, "partition_column": "order_date", "partition_grain": "daily"},
+      "fqn": ["analytics", "fct_orders"],
+      "schema": "analytics",
+      "database": "warehouse"
+    },
+
+    "model.analytics.payment_events": {
+      "unique_id": "model.analytics.payment_events",
+      "name": "payment_events",
+      "resource_type": "model",
+      "description": "Payment event stream. Grain: one row per payment attempt.",
+      "columns": {
+        "event_id": {
+          "name": "event_id",
+          "description": "Unique payment event identifier.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "order_id": {
+          "name": "order_id",
+          "description": "Foreign key to fct_orders.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "description": "Outcome of payment attempt. Values: succeeded, failed, pending.",
+          "data_type": "varchar",
+          "meta": {},
+          "tags": []
+        },
+        "payment_date": {
+          "name": "payment_date",
+          "description": "",
+          "data_type": "date",
+          "meta": {},
+          "tags": []
+        }
+      },
+      "depends_on": {"nodes": ["model.analytics.fct_orders"]},
+      "tags": ["silver", "pci"],
+      "meta": {"owner": "finance_team", "domain": "finance", "estimated_scan_gb": 18000, "partition_column": "payment_date", "partition_grain": "daily"},
+      "fqn": ["analytics", "payment_events"],
+      "schema": "analytics",
+      "database": "warehouse"
+    },
+
+    "model.analytics.support_tickets": {
+      "unique_id": "model.analytics.support_tickets",
+      "name": "support_tickets",
+      "resource_type": "model",
+      "description": "Customer support ticket records. Grain: one row per ticket.",
+      "columns": {
+        "ticket_id": {
+          "name": "ticket_id",
+          "description": "Unique support ticket identifier.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "description": "Foreign key to dim_customer.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "order_id": {
+          "name": "order_id",
+          "description": "Foreign key to fct_orders.",
+          "data_type": "integer",
+          "meta": {},
+          "tags": []
+        },
+        "escalation_level": {
+          "name": "escalation_level",
+          "description": "Escalation severity. Values: L1, L2, L3.",
+          "data_type": "varchar",
+          "meta": {},
+          "tags": []
+        },
+        "resolution_date": {
+          "name": "resolution_date",
+          "description": "",
+          "data_type": "date",
+          "meta": {},
+          "tags": []
+        }
+      },
+      "depends_on": {"nodes": ["model.analytics.dim_customer", "model.analytics.fct_orders"]},
+      "tags": ["silver"],
+      "meta": {"owner": "cx_team", "domain": "ops", "estimated_scan_gb": 25, "partition_column": "resolution_date", "partition_grain": "daily"},
+      "fqn": ["analytics", "support_tickets"],
+      "schema": "analytics",
+      "database": "warehouse"
+    },
+
+    "test.analytics.relationships_fct_orders_customer_id__customer_id__ref_dim_customer_": {
+      "unique_id": "test.analytics.relationships_fct_orders_customer_id__customer_id__ref_dim_customer_",
+      "name": "relationships_fct_orders_customer_id",
+      "resource_type": "test",
+      "test_metadata": {
+        "name": "relationships",
+        "kwargs": {
+          "column_name": "customer_id",
+          "to": "ref('dim_customer')",
+          "field": "customer_id",
+          "model": "ref('fct_orders')"
+        }
+      },
+      "depends_on": {
+        "nodes": ["model.analytics.dim_customer", "model.analytics.fct_orders"]
+      }
+    },
+
+    "test.analytics.relationships_payment_events_order_id__order_id__ref_fct_orders_": {
+      "unique_id": "test.analytics.relationships_payment_events_order_id__order_id__ref_fct_orders_",
+      "name": "relationships_payment_events_order_id",
+      "resource_type": "test",
+      "test_metadata": {
+        "name": "relationships",
+        "kwargs": {
+          "column_name": "order_id",
+          "to": "ref('fct_orders')",
+          "field": "order_id",
+          "model": "ref('payment_events')"
+        }
+      },
+      "depends_on": {
+        "nodes": ["model.analytics.fct_orders", "model.analytics.payment_events"]
+      }
+    },
+
+    "test.analytics.relationships_support_tickets_customer_id__customer_id__ref_dim_customer_": {
+      "unique_id": "test.analytics.relationships_support_tickets_customer_id__customer_id__ref_dim_customer_",
+      "name": "relationships_support_tickets_customer_id",
+      "resource_type": "test",
+      "test_metadata": {
+        "name": "relationships",
+        "kwargs": {
+          "column_name": "customer_id",
+          "to": "ref('dim_customer')",
+          "field": "customer_id",
+          "model": "ref('support_tickets')"
+        }
+      },
+      "depends_on": {
+        "nodes": ["model.analytics.dim_customer", "model.analytics.support_tickets"]
+      }
+    },
+
+    "test.analytics.relationships_support_tickets_order_id__order_id__ref_fct_orders_": {
+      "unique_id": "test.analytics.relationships_support_tickets_order_id__order_id__ref_fct_orders_",
+      "name": "relationships_support_tickets_order_id",
+      "resource_type": "test",
+      "test_metadata": {
+        "name": "relationships",
+        "kwargs": {
+          "column_name": "order_id",
+          "to": "ref('fct_orders')",
+          "field": "order_id",
+          "model": "ref('support_tickets')"
+        }
+      },
+      "depends_on": {
+        "nodes": ["model.analytics.fct_orders", "model.analytics.support_tickets"]
+      }
+    }
+  },
+
+  "sources": {},
+
+  "child_map": {
+    "model.analytics.dim_customer": [
+      "model.analytics.fct_orders",
+      "model.analytics.support_tickets"
+    ],
+    "model.analytics.fct_orders": [
+      "model.analytics.payment_events",
+      "model.analytics.support_tickets"
+    ],
+    "model.analytics.payment_events": [],
+    "model.analytics.support_tickets": []
+  },
+
+  "parent_map": {
+    "model.analytics.dim_customer": [],
+    "model.analytics.fct_orders": ["model.analytics.dim_customer"],
+    "model.analytics.payment_events": ["model.analytics.fct_orders"],
+    "model.analytics.support_tickets": [
+      "model.analytics.dim_customer",
+      "model.analytics.fct_orders"
+    ]
+  }
+}

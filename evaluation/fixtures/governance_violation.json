@@ -1,0 +1,50 @@
+[
+  {
+    "query": "show all payments",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment entity → payment_events (model tag: pci) → blocked"
+  },
+  {
+    "query": "list payment events",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment entity → payment_events (pci-tagged model)"
+  },
+  {
+    "query": "payment history analysis",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment entity triggers pci block on payment_events"
+  },
+  {
+    "query": "show payment status breakdown",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment maps to payment_events which has pci tag"
+  },
+  {
+    "query": "failed payment count",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment entity → payment_events → pci block"
+  },
+  {
+    "query": "show payment attempts by status",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payment_attempts → payment entity → pci-tagged model"
+  },
+  {
+    "query": "how many payments succeeded",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "payments → payment entity → payment_events (pci)"
+  },
+  {
+    "query": "billing event summary",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "GOVERNANCE_BLOCKED",
+    "notes": "billing is a synonym for payment → payment_events (pci)"
+  }
+]

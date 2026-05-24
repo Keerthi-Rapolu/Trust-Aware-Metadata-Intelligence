@@ -1,0 +1,18 @@
+{
+  "analyst": {
+    "allowed_domains": ["sales", "ops", "finance"],
+    "blocked_tags": ["pii", "pci", "restricted", "confidential"]
+  },
+  "finance_user": {
+    "allowed_domains": ["finance", "sales"],
+    "blocked_tags": ["pii", "pci", "restricted", "confidential"]
+  },
+  "support_user": {
+    "allowed_domains": ["ops", "sales"],
+    "blocked_tags": ["pii", "pci", "restricted", "confidential"]
+  },
+  "executive": {
+    "allowed_domains": ["sales", "ops", "finance"],
+    "blocked_tags": ["pci", "restricted", "confidential"]
+  }
+}

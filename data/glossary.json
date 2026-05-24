@@ -1,0 +1,58 @@
+{
+  "revenue": {
+    "description": "Total monetary value from sales transactions. May refer to gross or net.",
+    "synonyms": ["sales", "income", "earnings", "turnover", "gross_revenue", "net_revenue"],
+    "candidate_columns": ["revenue_gross", "revenue_net"],
+    "candidate_models": ["fct_orders"],
+    "domain": "finance"
+  },
+  "customer": {
+    "description": "Enterprise customer entity with segment, region and contact attributes.",
+    "synonyms": ["client", "account", "buyer", "user", "customers"],
+    "candidate_columns": ["customer_id", "segment", "region"],
+    "candidate_models": ["dim_customer"],
+    "domain": "sales"
+  },
+  "segment": {
+    "description": "Customer market segment classification. Values: enterprise, mid-market, smb.",
+    "synonyms": ["tier", "category", "group", "cohort", "segments"],
+    "candidate_columns": ["segment"],
+    "candidate_models": ["dim_customer"],
+    "domain": "sales"
+  },
+  "region": {
+    "description": "Customer geographic region. Values: AMER, EMEA, APAC.",
+    "synonyms": ["geography", "area", "location", "territory", "regions"],
+    "candidate_columns": ["region"],
+    "candidate_models": ["dim_customer"],
+    "domain": "sales"
+  },
+  "order": {
+    "description": "Purchase order placed by a customer.",
+    "synonyms": ["purchase", "booking", "orders"],
+    "candidate_columns": ["order_id", "order_date"],
+    "candidate_models": ["fct_orders"],
+    "domain": "sales"
+  },
+  "payment": {
+    "description": "Payment event associated with a customer order.",
+    "synonyms": ["charge", "billing", "invoice", "payments", "payment_attempt"],
+    "candidate_columns": ["payment_status", "payment_date", "event_id"],
+    "candidate_models": ["payment_events"],
+    "domain": "finance"
+  },
+  "support_ticket": {
+    "description": "Customer support ticket or escalation case.",
+    "synonyms": ["ticket", "case", "issue", "escalation", "support_case", "tickets"],
+    "candidate_columns": ["ticket_id", "escalation_level", "resolution_date"],
+    "candidate_models": ["support_tickets"],
+    "domain": "ops"
+  },
+  "escalation": {
+    "description": "Support ticket escalation level or priority severity.",
+    "synonyms": ["escalation_level", "priority", "severity", "escalations"],
+    "candidate_columns": ["escalation_level"],
+    "candidate_models": ["support_tickets"],
+    "domain": "ops"
+  }
+}

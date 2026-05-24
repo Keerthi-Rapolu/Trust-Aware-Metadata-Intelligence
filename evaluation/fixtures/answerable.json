@@ -1,0 +1,74 @@
+[
+  {
+    "query": "list all segments",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "segment entity → 1 candidate column → no semantic conflict"
+  },
+  {
+    "query": "show region data",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "region entity → 1 candidate column → no semantic conflict"
+  },
+  {
+    "query": "count escalation levels",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "escalation entity → 1 candidate column → no semantic conflict"
+  },
+  {
+    "query": "region breakdown",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "single-term query, 1 candidate column"
+  },
+  {
+    "query": "segment distribution",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "single-term query, 1 candidate column"
+  },
+  {
+    "query": "show escalation summary",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "escalation entity → 1 candidate column"
+  },
+  {
+    "query": "which regions are available",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "region entity → 1 candidate column"
+  },
+  {
+    "query": "escalation count by level",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "escalation entity → 1 candidate column → no conflict"
+  },
+  {
+    "query": "what are the different segments",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "segment entity → 1 candidate column"
+  },
+  {
+    "query": "how many escalations exist",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "escalation entity → 1 candidate column"
+  },
+  {
+    "query": "list regions by area",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "region entity → 1 candidate column"
+  },
+  {
+    "query": "escalation level analysis",
+    "expected_status": "SUCCESS",
+    "expected_failure_type": null,
+    "notes": "escalation entity → 1 candidate column"
+  }
+]

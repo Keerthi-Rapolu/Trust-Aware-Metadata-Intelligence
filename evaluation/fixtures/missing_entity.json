@@ -1,0 +1,50 @@
+[
+  {
+    "query": "show me xyz_metric_zz99",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "completely unknown entity"
+  },
+  {
+    "query": "what is the zzz_value for bbb",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "gibberish entities"
+  },
+  {
+    "query": "analyze the qwerty_dataset",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "unknown dataset reference"
+  },
+  {
+    "query": "show alpha_beta statistics",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "no matching glossary terms or models"
+  },
+  {
+    "query": "count the zqx entities",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "nonsense entity name"
+  },
+  {
+    "query": "revenue from unknown_source_table",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue entity found but has 2 candidate columns → SEMANTIC_CONFLICT"
+  },
+  {
+    "query": "aaabbb cccddd eeefff",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "all tokens unresolved"
+  },
+  {
+    "query": "show the hypothetical_pipeline metrics",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "INSUFFICIENT_SCHEMA",
+    "notes": "unknown pipeline — not in graph"
+  }
+]

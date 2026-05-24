@@ -1,0 +1,50 @@
+[
+  {
+    "query": "total revenue",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue → [revenue_gross, revenue_net]: two competing metric definitions"
+  },
+  {
+    "query": "show revenue numbers",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue entity → 2 candidate columns → conflict"
+  },
+  {
+    "query": "what is the revenue for this quarter",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue appears with no disambiguation"
+  },
+  {
+    "query": "revenue breakdown by region",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue is ambiguous; region is single-column but revenue fires first"
+  },
+  {
+    "query": "sum of revenue",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "sum(revenue) — which definition of revenue?"
+  },
+  {
+    "query": "show revenue trend over time",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "trend intent, but revenue still ambiguous"
+  },
+  {
+    "query": "average revenue per region",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "revenue ambiguous regardless of aggregation type"
+  },
+  {
+    "query": "revenue growth monthly",
+    "expected_status": "FAILURE",
+    "expected_failure_type": "SEMANTIC_CONFLICT",
+    "notes": "monthly grain does not resolve the revenue conflict"
+  }
+]
