@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why Enterprise Text-to-SQL Systems Fail Without Metadata Reasoning</title>
+  <meta name="description" content="A practitioner-oriented architecture paper on trust-aware metadata reasoning before LLM SQL generation.">
+  <style>
+    :root {
+      --bg: #fcfcfe;
+      --surface: #ffffff;
+      --ink: #1f2937;
+      --muted: #5b6474;
+      --line: #d7ddea;
+      --accent: #5f7adb;
+      --accent-soft: #eef2ff;
+      --success-soft: #e8f8f1;
+      --warn-soft: #fff5df;
+      --danger-soft: #fdebed;
+      --shadow: 0 18px 48px rgba(38, 53, 97, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #f7f8fd 0%, var(--bg) 180px);
+      color: var(--ink);
+      font: 18px/1.72 Georgia, "Times New Roman", serif;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 96px;
+    }
+
+    article {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 52px 56px 64px;
+    }
+
+    header {
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #314995;
+      font: 600 13px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      margin: 0 0 14px;
+      color: #172033;
+    }
+
+    h1 { font-size: 2.55rem; }
+    h2 {
+      font-size: 1.55rem;
+      margin-top: 44px;
+      padding-top: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font: 500 0.98rem/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .lead {
+      margin: 20px 0 0;
+      color: #2f3b52;
+      font-style: italic;
+    }
+
+    p { margin: 0 0 18px; }
+    ul, ol { margin: 0 0 18px 24px; }
+    li { margin: 0 0 10px; }
+
+    code {
+      background: #f5f7fb;
+      border: 1px solid #e6ebf5;
+      border-radius: 7px;
+      padding: 0.08em 0.35em;
+      font: 0.92em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 22px;
+      border-left: 4px solid var(--accent);
+      background: #f8faff;
+      border-radius: 0 14px 14px 0;
+      color: #2d3b57;
+    }
+
+    .compare,
+    .metrics {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 26px 0;
+      font: 500 0.98rem/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .compare th,
+    .compare td,
+    .metrics th,
+    .metrics td {
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .compare th,
+    .metrics th {
+      background: #f6f8fc;
+      color: #283651;
+      font-weight: 700;
+    }
+
+    .pipeline {
+      display: grid;
+      gap: 12px;
+      margin: 26px 0;
+    }
+
+    .pipeline-row {
+      display: grid;
+      gap: 12px;
+    }
+
+    .pipeline-row.main { grid-template-columns: repeat(7, 1fr); }
+    .pipeline-row.outcomes { grid-template-columns: repeat(3, 1fr); }
+
+    .step {
+      min-height: 96px;
+      padding: 18px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      font: 700 0.95rem/1.35 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reasoning { background: #eaf0ff; border-color: #bfd0ff; color: #27406f; }
+    .governance { background: #ffe8df; border-color: #f2c1ab; color: #6f3b26; }
+    .confidence { background: #e5f6ed; border-color: #bde0ca; color: #24523e; }
+    .success { background: var(--success-soft); border-color: #abd9c3; color: #1f5b45; }
+    .refusal { background: var(--warn-soft); border-color: #ebd098; color: #76540d; }
+    .blocked { background: var(--danger-soft); border-color: #e4b0b8; color: #7c2436; }
+
+    .links {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font: 500 0.96rem/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--muted);
+    }
+
+    a { color: #3157c8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    @media (max-width: 920px) {
+      article { padding: 36px 24px 44px; }
+      h1 { font-size: 2rem; }
+      .pipeline-row.main,
+      .pipeline-row.outcomes { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <div class="eyebrow">Architecture Paper</div>
+        <h1>Why Enterprise Text-to-SQL Systems Fail Without Metadata Reasoning</h1>
+        <div class="meta">Keerthi Rapolu · Independent Research · May 25, 2026</div>
+        <p class="lead">Most discussions of enterprise text-to-SQL focus on whether the LLM can produce correct SQL. This one focuses on a different question: whether the system should attempt generation at all.</p>
+        <p class="lead">This is a design paper, not a deployment report. The system described here is a research prototype built to explore one architectural idea: that deterministic metadata reasoning before LLM generation produces more trustworthy behavior than retrieval-then-generate pipelines. The benchmark evidence is synthetic. The failures it catches are realistic by design, not by observation.</p>
+        <p class="lead">That framing matters because the argument does not depend on a production deployment to be valid. It depends on whether the failure modes it addresses — semantic ambiguity, governance violations, hallucinated joins, missing schema grounding — are real problems in enterprise analytics. They are. Anyone who has worked with a data warehouse at scale has seen at least one of them.</p>
+        <p class="lead">Here’s the architecture, here’s what the benchmark shows, and here’s where it falls short.</p>
+      </header>
+
+      <h2>The Hidden Failure Modes of Enterprise Text-to-SQL</h2>
+      <p>Enterprise text-to-SQL failures are subtle because many of them still produce syntactically valid SQL. A query can compile, execute, and return data while still being wrong in the ways that matter most to analytical systems. The failure surface is not primarily parser correctness. It is trust.</p>
+      <p>In this paper, <em>trust-aware</em> refers to system behavior that constrains generation based on explicit metadata grounding, governance validation, and confidence thresholds.</p>
+      <p>In enterprise environments, several failure modes recur:</p>
+      <ul>
+        <li><strong>Semantic ambiguity.</strong> Terms such as <code>revenue</code>, <code>customer</code>, or <code>active</code> can map to multiple business definitions. Picking one silently is a correctness failure.</li>
+        <li><strong>Hallucinated joins.</strong> Metadata retrieval may surface relevant tables without proving that those tables can be joined safely. A model can be relevant and still be structurally unusable.</li>
+        <li><strong>Governance violations.</strong> A query may target PCI-tagged models, expose PII columns, or cross domain boundaries that a given role should not access.</li>
+        <li><strong>Unsafe warehouse scans.</strong> Broad or unrestricted analytical requests can imply extremely large scans, especially on partitioned event tables.</li>
+        <li><strong>Insufficient schema grounding.</strong> A user term may not exist in the manifest or glossary at all, creating pressure for the model to invent support that does not exist.</li>
+      </ul>
+      <p>These are not edge cases. They are the routine operating conditions of enterprise analytics systems. A text-to-SQL assistant that does not reason over them explicitly may appear useful in simplified environments while remaining operationally unsafe in practice.</p>
+
+      <h2>Why Retrieval Alone Is Not Reasoning</h2>
+      <p>Modern RAG pipelines solve one real problem well: they retrieve candidate context. In the text-to-SQL setting, that usually means table descriptions, column metadata, lineage hints, or prior query examples. Retrieval is necessary, but it is not sufficient.</p>
+      <p>The distinction matters because the safety and correctness decision is not reducible to semantic similarity:</p>
+      <ul>
+        <li>Retrieving <code>fct_orders</code> does not resolve whether <code>revenue</code> means <code>revenue_gross</code> or <code>revenue_net</code>.</li>
+        <li>Retrieving both <code>dim_customer</code> and <code>support_tickets</code> does not prove there is a clean join path between them.</li>
+        <li>Retrieving <code>payment_events</code> because it lexically matches <code>payments</code> does not override governance tags such as <code>pci</code>.</li>
+        <li>Retrieving a large partitioned table does not justify an unrestricted historical scan without a time filter.</li>
+      </ul>
+      <p>Retrieval answers the question: <em>What metadata is nearby?</em></p>
+      <p>Enterprise reasoning must answer a different set of questions:</p>
+      <ul>
+        <li>Which candidate interpretation is semantically justified?</li>
+        <li>Is there a reliable join path?</li>
+        <li>Is the query safe for this user and this dataset?</li>
+        <li>Is confidence high enough to proceed?</li>
+        <li>Should the system generate SQL at all?</li>
+      </ul>
+      <p>That difference is the thesis of this architecture. Retrieval is one signal. It is not the system’s decision procedure.</p>
+
+      <table class="compare">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Typical RAG SQL</th>
+            <th>This System</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Metadata retrieval</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Join validation</td><td>Weak or implicit</td><td>Deterministic and graph-backed</td></tr>
+          <tr><td>Governance validation</td><td>Limited or downstream</td><td>Explicit pre-generation gate</td></tr>
+          <tr><td>Semantic ambiguity handling</td><td>Often prompt-based</td><td>Structured refusal taxonomy</td></tr>
+          <tr><td>Confidence propagation</td><td>Minimal</td><td>Multi-stage weakest-link scoring</td></tr>
+          <tr><td>Unsafe query blocking</td><td>Rare</td><td>Built in before generation</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Designing a Trust-Aware Metadata Reasoning System</h2>
+      <p>The system described here is built around a deterministic metadata reasoning layer that sits between the user query and final SQL generation. The language model, when used, receives only a constrained execution plan. It does not receive the full burden of deciding intent, join validity, governance safety, or confidence thresholds by itself.</p>
+      <p>Deterministic planning constrains critical trust decisions to explicit system logic rather than relying entirely on probabilistic prompt behavior.</p>
+      <blockquote>SQL generation should be the final translation step, not the place where trust-critical reasoning first occurs.</blockquote>
+
+      <div class="pipeline">
+        <div class="pipeline-row main">
+          <div class="step reasoning">User Query</div>
+          <div class="step reasoning">Intent Extraction</div>
+          <div class="step reasoning">Metadata Retrieval</div>
+          <div class="step reasoning">Join Path Reasoning</div>
+          <div class="step reasoning">Ambiguity Detection</div>
+          <div class="step governance">Governance Validation</div>
+          <div class="step confidence">Confidence Propagation</div>
+        </div>
+        <div class="pipeline-row outcomes">
+          <div class="step success">Constrained SQL Generation</div>
+          <div class="step refusal">Safe Refusal</div>
+          <div class="step blocked">Governance Block</div>
+        </div>
+      </div>
+
+      <p>This structure is intentionally constrained. It does not attempt to turn the system into a general-purpose agent, a multi-tool framework, or a dashboard-first application. The emphasis is on trustworthy decision-making.</p>
+
+      <h2>Deterministic Planning Before LLM Generation</h2>
+      <p>The reasoning pipeline is organized as a sequence of deterministic stages:</p>
+      <ol>
+        <li><strong>Intent Extraction.</strong> The system classifies the query intent, such as lookup, segmentation, trend, or aggregation, and extracts basic temporal cues.</li>
+        <li><strong>Metadata Retrieval.</strong> Candidate models are ranked using composite retrieval rather than raw vector similarity alone.</li>
+        <li><strong>Join Path Reasoning.</strong> The graph layer searches for lineage-backed paths between candidate models and scores them using foreign-key strength, proximity, and lexical column similarity.</li>
+        <li><strong>Ambiguity Detection.</strong> Competing metric definitions, candidate columns, and weakly separated join alternatives trigger clarification or refusal.</li>
+        <li><strong>Governance Validation.</strong> PII, RBAC, scan risk, and unsafe patterns are evaluated before any generation step proceeds.</li>
+        <li><strong>Confidence Propagation.</strong> Retrieval, join, governance, completeness, and intent signals are combined so the weakest trustworthy component governs the decision.</li>
+        <li><strong>SQL Generation or Refusal.</strong> Only after the prior stages succeed does the system emit SQL.</li>
+      </ol>
+      <p>Each stage exists because it answers a distinct systems question. This is not redundancy. It is decomposition. The point is to avoid collapsing every uncertainty into a single prompt and hoping the model resolves it correctly.</p>
+      <p>One concrete enterprise case makes the join-reasoning requirement clearer. Consider the request <code>customers with failed payments after support escalation</code>. This is not a single-table lookup. It requires traversing multiple business domains: <code>support_tickets</code> → <code>customer_master</code> → <code>payment_events</code>. To answer safely, the system must verify that a lineage-backed join path actually exists, that the customer identifiers are compatible across the models, that there are not multiple competing routes through intermediate entities, and that governance restrictions on payment data do not block access.</p>
+
+      <h2>Honest Refusal as a First-Class System Behavior</h2>
+      <p>One of the strongest differences between this system and generic text-to-SQL pipelines is that refusal is treated as a product behavior, not as an embarrassing exception.</p>
+      <p>Consider a query such as <code>show revenue by region</code>. If <code>revenue</code> maps to both <code>revenue_gross</code> and <code>revenue_net</code>, the system should not “do its best.” It should refuse cleanly and explain the ambiguity. In analytical systems, silently selecting the wrong metric is frequently worse than returning no SQL.</p>
+      <p>The same logic applies when schema grounding fails. If a request such as <code>show me xyz_metric_zz99</code> does not map to the glossary or graph, the correct response is <code>INSUFFICIENT_SCHEMA</code>. This is not a weakness to hide. It is the right operating behavior when the metadata evidence is missing.</p>
+      <p>The implemented failure taxonomy currently distinguishes <code>GOVERNANCE_BLOCKED</code>, <code>UNSAFE_QUERY</code>, <code>INSUFFICIENT_SCHEMA</code>, <code>WEAK_JOIN</code>, <code>SEMANTIC_CONFLICT</code>, <code>AMBIGUOUS_JOIN</code>, <code>TEMPORAL_AMBIGUITY</code>, and <code>LOW_CONFIDENCE</code>. That taxonomy gives the system a vocabulary for why generation stopped.</p>
+
+      <h2>Confidence Propagation Across the Planning Pipeline</h2>
+      <p>The system does not treat confidence as a single opaque scalar attached after the fact. Confidence is propagated across several planning signals: retrieval quality, join-path confidence, governance clearance, metadata completeness, and intent clarity.</p>
+      <p>The current implementation uses a weakest-link model in which the minimum trusted component, adjusted by intent clarity, governs the final confidence. That design is intentionally conservative. A query with excellent semantic retrieval but poor join confidence should not receive a high final score. Likewise, a governance-hard-blocked query should not be rescued by strong lexical similarity.</p>
+      <blockquote>Confidence should describe whether the plan is trustworthy, not whether the language model sounds fluent.</blockquote>
+      <p>In the current demo environment, this also exposed a useful weakness: some benign single-entity queries were being refused because the default non-embedding retrieval fallback was too weak. Improving that fallback increased benchmark accuracy and allowed the interface to surface at least one genuine SQL-generation path. That outcome is exactly what a benchmark should reveal.</p>
+
+      <h2>Governance-Aware SQL Orchestration</h2>
+      <p>Enterprise analytics systems must reason about more than semantics. They also need policy awareness.</p>
+      <p>The governance layer in this architecture evaluates three categories:</p>
+      <ol>
+        <li><strong>PII and restricted data.</strong> Models and columns tagged as PCI, restricted, confidential, or hard PII create immediate blocks.</li>
+        <li><strong>Role-based access.</strong> Candidate models are compared against the user’s allowed domains and blocked tags.</li>
+        <li><strong>Query cost risk.</strong> Estimated scan volume and unsafe patterns, such as unrestricted historical scans on large partitioned tables, are surfaced and may block execution.</li>
+      </ol>
+      <p>This matters because enterprise risk is not only about what SQL says. It is also about what the SQL would do. A request such as <code>show all payments</code> is not merely a retrieval problem. It is a governance problem. In the current synthetic environment, <code>payment_events</code> is PCI-tagged and carries high scan cost. The correct system behavior is to block before generation, not to generate and hope downstream controls catch the issue later.</p>
+
+      <h2>Evaluation and Failure Taxonomy</h2>
+      <p>The architecture claims several things: that it can refuse honestly, block unsafe requests, classify failures explicitly, and propagate confidence through deterministic planning. Those claims need evidence.</p>
+      <p>To make the behavior measurable, the repository includes a grouped benchmark runner that evaluates five fixture categories: answerable queries, ambiguity cases, hallucination resistance via missing-schema queries, governance violations, and unsafe operational queries.</p>
+
+      <table class="metrics">
+        <thead>
+          <tr><th>Metric</th><th>Score</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Overall accuracy</td><td>0.82</td></tr>
+          <tr><td>Refusal precision</td><td>0.82</td></tr>
+          <tr><td>Refusal recall</td><td>0.97</td></tr>
+          <tr><td>Failure-type F1</td><td>0.89</td></tr>
+          <tr><td>Answerable accuracy</td><td>0.33</td></tr>
+          <tr><td>Ambiguity accuracy</td><td>1.00</td></tr>
+          <tr><td>Hallucination accuracy</td><td>0.88</td></tr>
+          <tr><td>Governance recall</td><td>1.00</td></tr>
+          <tr><td>Unsafe-query recall</td><td>1.00</td></tr>
+        </tbody>
+      </table>
+
+      <p>These results tell a more useful story than a polished demo alone could: governance and unsafe-query behavior are already strong, ambiguity handling is highly reliable on the current fixture set, and answerable-query recovery is improving but still incomplete.</p>
+      <p>The benchmark suite is synthetic and the fixtures were designed by the same author as the system. Governance and unsafe-query recall of 1.00 on self-authored tests do not prove production readiness; they show that the system’s trust behaviors are explicit enough to be measured, challenged, and improved over time.</p>
+      <p>The benchmark intentionally prioritizes trustworthy refusal behavior over unconstrained SQL generation. From a systems perspective, that is a defensible trade. It is better for the system to be conservatively correct than fluently wrong. The <code>0.33</code> answerable-query accuracy is therefore the number that matters most for honest calibration.</p>
+      <p>The current implementation also has clear limitations. It depends heavily on metadata quality, lineage completeness, and governance tagging accuracy. Sparse or inconsistent metadata reduces retrieval confidence, weakens join validation, and increases refusal rates even when a human analyst might be able to recover the intent manually.</p>
+
+      <h2>Rethinking Enterprise AI Safety for Analytics Systems</h2>
+      <p>The main architectural insight of this work is not about prompts, embeddings, or front-end presentation. It is about where reasoning should happen.</p>
+      <p>If the system leaves semantic disambiguation, join validation, governance judgment, and confidence thresholding to the final SQL generation step, it has already made the most important design mistake. At that point the model is being asked to invent the trust boundary instead of respecting one.</p>
+      <blockquote>
+        <p>The more useful question is not: <strong>Can the LLM generate SQL?</strong></p>
+        <p>The more important question is: <strong>Should the system generate SQL at all?</strong></p>
+      </blockquote>
+      <p>That shift changes the design space. It leads naturally toward explicit metadata grounding, deterministic planning, honest refusal, confidence propagation, and governance-first orchestration. It also produces a system that can be evaluated as a reasoning pipeline rather than a demo of prompt fluency.</p>
+      <p>This prototype does not answer that question completely. What it does is make the question concrete, implement one approach to it, and measure the result honestly.</p>
+      <p>For practitioners, that is the key takeaway. In enterprise analytics, the quality of the system is not measured only by how often it returns SQL. It is measured by how reliably it knows when not to.</p>
+
+      <div class="links">
+        <div>Repository: <a href="https://github.com/Keerthi-Rapolu/Trust-Aware-Metadata-Intelligence">Trust-Aware-Metadata-Intelligence</a></div>
+        <div>PDF version: <a href="docs/paper.pdf">docs/paper.pdf</a></div>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
