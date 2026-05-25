@@ -1,7 +1,5 @@
 # Reasoning Algorithms
 
-**Design reference:** `EXPANSION_DESIGN.md §7 — Reasoning Algorithms`
-
 All algorithms are deterministic — no LLM or network calls required.
 
 ---

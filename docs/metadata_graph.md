@@ -5,8 +5,6 @@
 The metadata graph is a directed graph of dbt models and their lineage relationships.
 It is the foundation for join-path inference, lineage proximity scoring, and ambiguity detection.
 
-Design reference: [EXPANSION_DESIGN.md §8 — Metadata Graph Example](../EXPANSION_DESIGN.md#8-metadata-graph-example)
-
 ---
 
 ## Graph Schema
@@ -54,8 +52,6 @@ Source: `data/sample_manifest.json`
 ## Hop → Proximity Score Mapping
 
 Used by `lineage_proximity_score()` in `ingestion/graph_store.py`.
-
-Design reference: [EXPANSION_DESIGN.md §7.1 — lineage_proximity factor](../EXPANSION_DESIGN.md#71-join-path-ranking-algorithm)
 
 | Graph Distance      | Score |
 | ------------------- | ----- |

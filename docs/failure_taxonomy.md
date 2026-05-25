@@ -1,7 +1,5 @@
 # Failure Taxonomy
 
-**Design reference:** `EXPANSION_DESIGN.md §9 — Failure Taxonomy`
-
 Every query that cannot be safely answered receives a **named failure type**, a structured response, and a human-readable recommendation.  No SQL is generated until all failures are resolved.
 
 ---

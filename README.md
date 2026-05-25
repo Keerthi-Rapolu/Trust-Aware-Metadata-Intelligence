@@ -14,11 +14,9 @@ Unlike conventional RAG SQL systems, this platform separates metadata reasoning,
 
 ## Paper
 
-Read the practitioner paper:
+[Read Practitioner Architecture Paper](docs/paper.pdf)
 
-<a href="./article.pdf" target="_blank" rel="noopener noreferrer"><strong>Open Paper (PDF)</strong></a>
-
-GitHub will usually open the PDF in the browser. From there, it can be downloaded directly from the PDF viewer.
+GitHub will usually open the PDF in the browser. It can also be downloaded directly from the PDF viewer.
 
 ---
 
@@ -27,8 +25,6 @@ GitHub will usually open the PDF in the browser. From there, it can be downloade
 Try the hosted demo:
 
 **[https://trust-aware-metadata-intelligence.streamlit.app/](https://trust-aware-metadata-intelligence.streamlit.app/)**
-
-*Add hero screenshot here.*
 
 ---
 
@@ -208,21 +204,68 @@ Each failure produces a structured explanation surfaced in the UI and included i
 ## Architecture
 
 ```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "background": "#0f172a",
+    "primaryTextColor": "#e5edf7",
+    "secondaryTextColor": "#dbe6f3",
+    "lineColor": "#7f93ad",
+    "fontFamily": "Segoe UI, Arial, sans-serif"
+  },
+  "flowchart": {
+    "nodeSpacing": 34,
+    "rankSpacing": 42,
+    "curve": "basis"
+  }
+}}%%
 flowchart TD
-    A[User Query] --> B[Intent Extraction]
-    B --> C[Semantic Metadata Retrieval]
-    C --> D[Join Path Reasoning]
-    D --> E[Ambiguity Detection]
-    E --> F[Governance Validation]
-    F --> G[Confidence Propagation]
+    subgraph P["Reasoning and Planning"]
+        A[User Query] --> B[Intent Extraction]
+        B --> C[Metadata Retrieval]
+        C --> D[Join Reasoning]
+        D --> E[Ambiguity Check]
+    end
 
-    G -->|High Confidence| H[Constrained SQL Generation]
-    G -->|Insufficient Metadata| I[Safe Refusal]
-    G -->|Governance Risk| J[Governance Block]
+    subgraph T["Trust Gate"]
+        E --> F[Governance Validation]
+        F --> G[Confidence Propagation]
+    end
 
-    H --> K[SQL Output]
-    I --> L[Refusal Explanation]
-    J --> M[Blocked Explanation]
+    subgraph O["Outcomes"]
+        G -->|High trust| H[SQL Generation]
+        G -->|Low confidence / ambiguity| I[Safe Refusal]
+        G -->|Policy risk| J[Governance Block]
+        H --> K[SQL Output]
+        I --> L[Refusal Explanation]
+        J --> M[Blocked Explanation]
+    end
+
+    classDef reasoning fill:#1e3a5f,stroke:#8ea3bf,stroke-width:2px,color:#eef4fb,rx:8px,ry:8px;
+    classDef governance fill:#5b3b1f,stroke:#d1a46a,stroke-width:2px,color:#f9ecdc,rx:8px,ry:8px;
+    classDef confidence fill:#244b3c,stroke:#87b8a5,stroke-width:2px,color:#eef8f4,rx:8px,ry:8px;
+    classDef success fill:#1f6f5f,stroke:#7bc4b4,stroke-width:2.5px,color:#eefcf9,rx:8px,ry:8px;
+    classDef refusal fill:#9a6700,stroke:#f0c36d,stroke-width:2.5px,color:#fff4da,rx:8px,ry:8px;
+    classDef blocked fill:#7f1d1d,stroke:#e59a9a,stroke-width:2.5px,color:#fff0f0,rx:8px,ry:8px;
+    classDef neutral fill:#162235,stroke:#7f93ad,stroke-width:2px,color:#e7eef8,rx:8px,ry:8px;
+    classDef group fill:#0f172a,stroke:#42536b,stroke-width:1.5px,color:#cbd6e3;
+
+    class A neutral;
+    class B,C,D,E reasoning;
+    class F governance;
+    class G confidence;
+    class H,K success;
+    class I,L refusal;
+    class J,M blocked;
+    class P,T,O group;
+
+    linkStyle default stroke:#7f93ad,stroke-width:2px;
+    linkStyle 5 stroke:#7bc4b4,stroke-width:3px;
+    linkStyle 6 stroke:#f0c36d,stroke-width:3px;
+    linkStyle 7 stroke:#e59a9a,stroke-width:3px;
+    linkStyle 8 stroke:#7bc4b4,stroke-width:3px;
+    linkStyle 9 stroke:#f0c36d,stroke-width:3px;
+    linkStyle 10 stroke:#e59a9a,stroke-width:3px;
 ```
 
 ---
@@ -299,17 +342,13 @@ streamlit run app.py
 
 ## Screenshots
 
-**Safe SQL Generation**
+Final README screenshots are still pending capture from the Streamlit demo:
 
-*Add screenshot here.*
+- `SAFE SQL GENERATED`
+- `SAFE REFUSAL`
+- `GOVERNANCE BLOCK`
 
-**Semantic Conflict Refusal**
-
-*Add screenshot here.*
-
-**Governance Blocking**
-
-*Add screenshot here.*
+Those are the only remaining public-artifact images not yet checked in.
 
 ---
 
@@ -362,16 +401,58 @@ This project asks:
 That distinction is the foundation of this architecture.
 
 ```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "background": "#0f172a",
+    "primaryTextColor": "#e5edf7",
+    "secondaryTextColor": "#dbe6f3",
+    "lineColor": "#7f93ad",
+    "fontFamily": "Segoe UI, Arial, sans-serif"
+  },
+  "flowchart": {
+    "nodeSpacing": 34,
+    "rankSpacing": 42,
+    "curve": "basis"
+  }
+}}%%
 flowchart LR
-    A[Conventional Text-to-SQL] --> B[Retrieve Similar Schema]
-    B --> C[LLM Generates SQL]
-    C --> D[Possible Hallucination]
+    subgraph C1["Conventional Pipeline"]
+        A[Conventional SQL] --> B[Schema Retrieval]
+        B --> C[LLM SQL Generation]
+        C --> D[Unchecked Risk]
+    end
 
-    E[This Project] --> F[Metadata Reasoning]
-    F --> G[Governance + Confidence Checks]
-    G --> H{Should SQL be generated?}
-    H -->|Yes| I[Generate SQL]
-    H -->|No| J[Refuse or Block]
+    subgraph C2["Trust-Aware Pipeline"]
+        E[This System] --> F[Metadata Reasoning]
+        F --> G[Governance + Confidence]
+        G --> H{Should SQL be generated?}
+        H -->|Yes| I[Trusted SQL]
+        H -->|No| J[Refuse or Block]
+    end
+
+    classDef conventional fill:#323b4b,stroke:#7f93ad,stroke-width:2px,color:#ecf1f8,rx:8px,ry:8px;
+    classDef conventionalRisk fill:#6b2b2b,stroke:#d6a3a3,stroke-width:2.5px,color:#fff0f0,rx:8px,ry:8px;
+    classDef trusted fill:#1e3a5f,stroke:#8ea3bf,stroke-width:2px,color:#eef4fb,rx:8px,ry:8px;
+    classDef trustedGate fill:#244b3c,stroke:#87b8a5,stroke-width:2px,color:#eef8f4,rx:8px,ry:8px;
+    classDef decision fill:#10243f,stroke:#9fb6d1,stroke-width:3px,color:#f4f8fd;
+    classDef trustedOutcome fill:#1f6f5f,stroke:#7bc4b4,stroke-width:2.5px,color:#eefcf9,rx:8px,ry:8px;
+    classDef blockedOutcome fill:#9a6700,stroke:#f0c36d,stroke-width:2.5px,color:#fff4da,rx:8px,ry:8px;
+    classDef group fill:#0f172a,stroke:#42536b,stroke-width:1.5px,color:#cbd6e3;
+
+    class A,B,C conventional;
+    class D conventionalRisk;
+    class E,F trusted;
+    class G trustedGate;
+    class H decision;
+    class I trustedOutcome;
+    class J blockedOutcome;
+    class C1,C2 group;
+
+    linkStyle default stroke:#7f93ad,stroke-width:2px;
+    linkStyle 2 stroke:#d6a3a3,stroke-width:3px;
+    linkStyle 6 stroke:#7bc4b4,stroke-width:3px;
+    linkStyle 7 stroke:#f0c36d,stroke-width:3px;
 ```
 
 ---

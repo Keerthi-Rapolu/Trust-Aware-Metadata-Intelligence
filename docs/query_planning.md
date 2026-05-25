@@ -1,7 +1,5 @@
 # Query Planning Pipeline
 
-**Design reference:** `EXPANSION_DESIGN.md §6 — Semantic Query Planning Engine`
-
 The `QueryPlanner` orchestrates a deterministic 10-step pipeline before any LLM
 interaction. The LLM receives only a **structured execution plan** — it never sees
 raw manifest data, graph adjacency lists, or glossary definitions.
