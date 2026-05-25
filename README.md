@@ -215,32 +215,36 @@ Each failure produces a structured explanation surfaced in the UI and included i
     "fontFamily": "Segoe UI, Arial, sans-serif"
   },
   "flowchart": {
-    "nodeSpacing": 34,
-    "rankSpacing": 42,
-    "curve": "basis"
+    "nodeSpacing": 22,
+    "rankSpacing": 30,
+    "curve": "monotoneX"
   }
 }}%%
-flowchart TD
-    subgraph P["Reasoning and Planning"]
-        A["User Query"] --> B["Intent<br/>Extraction"]
-        B --> C["Metadata<br/>Retrieval"]
-        C --> D["Join<br/>Reasoning"]
-        D --> E["Ambiguity<br/>Check"]
+flowchart LR
+    subgraph P["Reasoning"]
+        direction LR
+        A["&nbsp;User Query&nbsp;"] --> B["&nbsp;Intent Extraction&nbsp;"]
+        B --> C["&nbsp;Metadata Retrieval&nbsp;"]
+        C --> D["&nbsp;Join Reasoning&nbsp;"]
+        D --> E["&nbsp;Ambiguity Check&nbsp;"]
     end
 
-    subgraph T["Trust Gate"]
-        E --> F["Governance<br/>Validation"]
-        F --> G["Confidence<br/>Propagation"]
+    subgraph T["Trust"]
+        direction LR
+        E --> F["&nbsp;Governance Validation&nbsp;"]
+        F --> G["&nbsp;Confidence Propagation&nbsp;"]
     end
 
     subgraph O["Outcomes"]
-        G -->|High trust| H["SQL<br/>Generation"]
-        G -->|Low confidence / ambiguity| I["Safe<br/>Refusal"]
-        G -->|Policy risk| J["Governance<br/>Block"]
-        H --> K["SQL<br/>Output"]
-        I --> L["Refusal<br/>Explanation"]
-        J --> M["Blocked<br/>Explanation"]
+        direction TB
+        H["&nbsp;SQL Generation&nbsp;"] --> K["&nbsp;SQL Output&nbsp;"]
+        I["&nbsp;Safe Refusal&nbsp;"] --> L["&nbsp;Refusal Explanation&nbsp;"]
+        J["&nbsp;Governance Block&nbsp;"] --> M["&nbsp;Blocked Explanation&nbsp;"]
     end
+
+    G -->|High trust| H
+    G -->|Needs clarification| I
+    G -->|Policy risk| J
 
     classDef reasoning fill:#c9dcff,stroke:#89a9e8,stroke-width:2px,color:#24324d,rx:8px,ry:8px;
     classDef governance fill:#ffd9c9,stroke:#e0aa8d,stroke-width:2px,color:#4f3428,rx:8px,ry:8px;
@@ -413,24 +417,26 @@ That distinction is the foundation of this architecture.
     "fontFamily": "Segoe UI, Arial, sans-serif"
   },
   "flowchart": {
-    "nodeSpacing": 34,
-    "rankSpacing": 42,
-    "curve": "basis"
+    "nodeSpacing": 22,
+    "rankSpacing": 30,
+    "curve": "monotoneX"
   }
 }}%%
 flowchart LR
     subgraph C1["Conventional Pipeline"]
-        A["Conventional SQL"] --> B["Schema<br/>Retrieval"]
-        B --> C["LLM SQL<br/>Generation"]
-        C --> D["Unchecked<br/>Risk"]
+        direction LR
+        A["&nbsp;Conventional SQL&nbsp;"] --> B["&nbsp;Schema Retrieval&nbsp;"]
+        B --> C["&nbsp;LLM SQL Generation&nbsp;"]
+        C --> D["&nbsp;Unchecked Risk&nbsp;"]
     end
 
     subgraph C2["Trust-Aware Pipeline"]
-        E["This System"] --> F["Metadata<br/>Reasoning"]
-        F --> G["Governance +<br/>Confidence"]
-        G --> H{Should SQL be generated?}
-        H -->|Yes| I["Trusted SQL"]
-        H -->|No| J["Refuse or Block"]
+        direction LR
+        E["&nbsp;This System&nbsp;"] --> F["&nbsp;Metadata Reasoning&nbsp;"]
+        F --> G["&nbsp;Governance + Confidence&nbsp;"]
+        G --> H{"&nbsp;Should SQL be generated?&nbsp;"}
+        H -->|Yes| I["&nbsp;Trusted SQL&nbsp;"]
+        H -->|No| J["&nbsp;Refuse or Block&nbsp;"]
     end
 
     classDef conventional fill:#d8deea,stroke:#98a6bf,stroke-width:2px,color:#303948,rx:8px,ry:8px;
