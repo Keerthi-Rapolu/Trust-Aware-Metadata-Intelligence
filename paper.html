@@ -88,6 +88,29 @@
       font-style: italic;
     }
 
+    .hero {
+      margin: 34px 0 10px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fafbff;
+    }
+
+    .hero img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      border: 1px solid #e3e8f3;
+    }
+
+    .hero figcaption {
+      margin-top: 12px;
+      color: var(--muted);
+      font: 500 0.92rem/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+    }
+
     p { margin: 0 0 18px; }
     ul, ol { margin: 0 0 18px 24px; }
     li { margin: 0 0 10px; }
@@ -198,6 +221,11 @@
         <p class="lead">That framing matters because the argument does not depend on a production deployment to be valid. It depends on whether the failure modes it addresses — semantic ambiguity, governance violations, hallucinated joins, missing schema grounding — are real problems in enterprise analytics. They are. Anyone who has worked with a data warehouse at scale has seen at least one of them.</p>
         <p class="lead">Here’s the architecture, here’s what the benchmark shows, and here’s where it falls short.</p>
       </header>
+
+      <figure class="hero">
+        <img src="docs/screenshots/safe-sql-generated.png" alt="Streamlit reasoning demo showing a safe SQL generated outcome banner.">
+        <figcaption>Streamlit reasoning demo showing a successful trust-approved SQL generation path.</figcaption>
+      </figure>
 
       <h2>The Hidden Failure Modes of Enterprise Text-to-SQL</h2>
       <p>Enterprise text-to-SQL failures are subtle because many of them still produce syntactically valid SQL. A query can compile, execute, and return data while still being wrong in the ways that matter most to analytical systems. The failure surface is not primarily parser correctness. It is trust.</p>
@@ -349,7 +377,8 @@
 
       <div class="links">
         <div>Repository: <a href="https://github.com/Keerthi-Rapolu/Trust-Aware-Metadata-Intelligence">Trust-Aware-Metadata-Intelligence</a></div>
-        <div>PDF version: <a href="docs/paper.pdf">docs/paper.pdf</a></div>
+        <div>PDF version: <a href="./docs/paper.pdf">paper.pdf</a></div>
+        <div>Live demo: <a href="https://trust-aware-metadata-intelligence.streamlit.app/">trust-aware-metadata-intelligence.streamlit.app</a></div>
       </div>
     </article>
   </main>
