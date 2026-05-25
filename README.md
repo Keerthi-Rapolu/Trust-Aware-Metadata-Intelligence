@@ -347,13 +347,17 @@ streamlit run app.py
 
 ## Screenshots
 
-Final README screenshots are still pending capture from the Streamlit demo:
+**SAFE SQL GENERATED**
 
-- `SAFE SQL GENERATED`
-- `SAFE REFUSAL`
-- `GOVERNANCE BLOCK`
+![SAFE SQL GENERATED](docs/screenshots/safe-sql-generated.png)
 
-Those are the only remaining public-artifact images not yet checked in.
+**SAFE REFUSAL**
+
+![SAFE REFUSAL](docs/screenshots/safe-refusal.png)
+
+**GOVERNANCE BLOCK**
+
+![GOVERNANCE BLOCK](docs/screenshots/governance-block.png)
 
 ---
 
