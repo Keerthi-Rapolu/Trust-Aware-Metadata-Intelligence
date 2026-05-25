@@ -208,9 +208,9 @@ Each failure produces a structured explanation surfaced in the UI and included i
   "theme": "base",
   "themeVariables": {
     "background": "#0f172a",
-    "primaryTextColor": "#e5edf7",
-    "secondaryTextColor": "#dbe6f3",
-    "lineColor": "#7f93ad",
+    "primaryTextColor": "#eef2ff",
+    "secondaryTextColor": "#e8eefb",
+    "lineColor": "#a7b7d6",
     "fontFamily": "Segoe UI, Arial, sans-serif"
   },
   "flowchart": {
@@ -241,14 +241,14 @@ flowchart TD
         J --> M[Blocked Explanation]
     end
 
-    classDef reasoning fill:#1e3a5f,stroke:#8ea3bf,stroke-width:2px,color:#eef4fb,rx:8px,ry:8px;
-    classDef governance fill:#5b3b1f,stroke:#d1a46a,stroke-width:2px,color:#f9ecdc,rx:8px,ry:8px;
-    classDef confidence fill:#244b3c,stroke:#87b8a5,stroke-width:2px,color:#eef8f4,rx:8px,ry:8px;
-    classDef success fill:#1f6f5f,stroke:#7bc4b4,stroke-width:2.5px,color:#eefcf9,rx:8px,ry:8px;
-    classDef refusal fill:#9a6700,stroke:#f0c36d,stroke-width:2.5px,color:#fff4da,rx:8px,ry:8px;
-    classDef blocked fill:#7f1d1d,stroke:#e59a9a,stroke-width:2.5px,color:#fff0f0,rx:8px,ry:8px;
-    classDef neutral fill:#162235,stroke:#7f93ad,stroke-width:2px,color:#e7eef8,rx:8px,ry:8px;
-    classDef group fill:#0f172a,stroke:#42536b,stroke-width:1.5px,color:#cbd6e3;
+    classDef reasoning fill:#c9dcff,stroke:#89a9e8,stroke-width:2px,color:#24324d,rx:8px,ry:8px;
+    classDef governance fill:#ffd9c9,stroke:#e0aa8d,stroke-width:2px,color:#4f3428,rx:8px,ry:8px;
+    classDef confidence fill:#ccefdc,stroke:#84bc9f,stroke-width:2px,color:#213a30,rx:8px,ry:8px;
+    classDef success fill:#bee9df,stroke:#68b7a2,stroke-width:2.5px,color:#173730,rx:8px,ry:8px;
+    classDef refusal fill:#ffe8b8,stroke:#d8b065,stroke-width:2.5px,color:#5b460f,rx:8px,ry:8px;
+    classDef blocked fill:#f6c8d1,stroke:#d78c9a,stroke-width:2.5px,color:#5a2430,rx:8px,ry:8px;
+    classDef neutral fill:#ddd8ff,stroke:#9ca5e7,stroke-width:2px,color:#2d3158,rx:8px,ry:8px;
+    classDef group fill:#151d30,stroke:#5d6b86,stroke-width:1.5px,color:#d8e1ef;
 
     class A neutral;
     class B,C,D,E reasoning;
@@ -259,13 +259,13 @@ flowchart TD
     class J,M blocked;
     class P,T,O group;
 
-    linkStyle default stroke:#7f93ad,stroke-width:2px;
-    linkStyle 5 stroke:#7bc4b4,stroke-width:3px;
-    linkStyle 6 stroke:#f0c36d,stroke-width:3px;
-    linkStyle 7 stroke:#e59a9a,stroke-width:3px;
-    linkStyle 8 stroke:#7bc4b4,stroke-width:3px;
-    linkStyle 9 stroke:#f0c36d,stroke-width:3px;
-    linkStyle 10 stroke:#e59a9a,stroke-width:3px;
+    linkStyle default stroke:#a7b7d6,stroke-width:2px;
+    linkStyle 5 stroke:#68b7a2,stroke-width:3px;
+    linkStyle 6 stroke:#d8b065,stroke-width:3px;
+    linkStyle 7 stroke:#d78c9a,stroke-width:3px;
+    linkStyle 8 stroke:#68b7a2,stroke-width:3px;
+    linkStyle 9 stroke:#d8b065,stroke-width:3px;
+    linkStyle 10 stroke:#d78c9a,stroke-width:3px;
 ```
 
 ---
@@ -405,9 +405,9 @@ That distinction is the foundation of this architecture.
   "theme": "base",
   "themeVariables": {
     "background": "#0f172a",
-    "primaryTextColor": "#e5edf7",
-    "secondaryTextColor": "#dbe6f3",
-    "lineColor": "#7f93ad",
+    "primaryTextColor": "#eef2ff",
+    "secondaryTextColor": "#e8eefb",
+    "lineColor": "#a7b7d6",
     "fontFamily": "Segoe UI, Arial, sans-serif"
   },
   "flowchart": {
@@ -431,14 +431,14 @@ flowchart LR
         H -->|No| J[Refuse or Block]
     end
 
-    classDef conventional fill:#323b4b,stroke:#7f93ad,stroke-width:2px,color:#ecf1f8,rx:8px,ry:8px;
-    classDef conventionalRisk fill:#6b2b2b,stroke:#d6a3a3,stroke-width:2.5px,color:#fff0f0,rx:8px,ry:8px;
-    classDef trusted fill:#1e3a5f,stroke:#8ea3bf,stroke-width:2px,color:#eef4fb,rx:8px,ry:8px;
-    classDef trustedGate fill:#244b3c,stroke:#87b8a5,stroke-width:2px,color:#eef8f4,rx:8px,ry:8px;
-    classDef decision fill:#10243f,stroke:#9fb6d1,stroke-width:3px,color:#f4f8fd;
-    classDef trustedOutcome fill:#1f6f5f,stroke:#7bc4b4,stroke-width:2.5px,color:#eefcf9,rx:8px,ry:8px;
-    classDef blockedOutcome fill:#9a6700,stroke:#f0c36d,stroke-width:2.5px,color:#fff4da,rx:8px,ry:8px;
-    classDef group fill:#0f172a,stroke:#42536b,stroke-width:1.5px,color:#cbd6e3;
+    classDef conventional fill:#d8deea,stroke:#98a6bf,stroke-width:2px,color:#303948,rx:8px,ry:8px;
+    classDef conventionalRisk fill:#f3cbd1,stroke:#d28f99,stroke-width:2.5px,color:#57252e,rx:8px,ry:8px;
+    classDef trusted fill:#c9dcff,stroke:#89a9e8,stroke-width:2px,color:#24324d,rx:8px,ry:8px;
+    classDef trustedGate fill:#ccefdc,stroke:#84bc9f,stroke-width:2px,color:#213a30,rx:8px,ry:8px;
+    classDef decision fill:#b9c8f4,stroke:#738ccc,stroke-width:3px,color:#1f2943;
+    classDef trustedOutcome fill:#bee9df,stroke:#68b7a2,stroke-width:2.5px,color:#173730,rx:8px,ry:8px;
+    classDef blockedOutcome fill:#ffe8b8,stroke:#d8b065,stroke-width:2.5px,color:#5b460f,rx:8px,ry:8px;
+    classDef group fill:#151d30,stroke:#5d6b86,stroke-width:1.5px,color:#d8e1ef;
 
     class A,B,C conventional;
     class D conventionalRisk;
@@ -449,10 +449,10 @@ flowchart LR
     class J blockedOutcome;
     class C1,C2 group;
 
-    linkStyle default stroke:#7f93ad,stroke-width:2px;
-    linkStyle 2 stroke:#d6a3a3,stroke-width:3px;
-    linkStyle 6 stroke:#7bc4b4,stroke-width:3px;
-    linkStyle 7 stroke:#f0c36d,stroke-width:3px;
+    linkStyle default stroke:#a7b7d6,stroke-width:2px;
+    linkStyle 2 stroke:#d28f99,stroke-width:3px;
+    linkStyle 6 stroke:#68b7a2,stroke-width:3px;
+    linkStyle 7 stroke:#d8b065,stroke-width:3px;
 ```
 
 ---
