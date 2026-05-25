@@ -222,24 +222,24 @@ Each failure produces a structured explanation surfaced in the UI and included i
 }}%%
 flowchart TD
     subgraph P["Reasoning and Planning"]
-        A[User Query] --> B[Intent Extraction]
-        B --> C[Metadata Retrieval]
-        C --> D[Join Reasoning]
-        D --> E[Ambiguity Check]
+        A["User Query"] --> B["Intent<br/>Extraction"]
+        B --> C["Metadata<br/>Retrieval"]
+        C --> D["Join<br/>Reasoning"]
+        D --> E["Ambiguity<br/>Check"]
     end
 
     subgraph T["Trust Gate"]
-        E --> F[Governance Validation]
-        F --> G[Confidence Propagation]
+        E --> F["Governance<br/>Validation"]
+        F --> G["Confidence<br/>Propagation"]
     end
 
     subgraph O["Outcomes"]
-        G -->|High trust| H[SQL Generation]
-        G -->|Low confidence / ambiguity| I[Safe Refusal]
-        G -->|Policy risk| J[Governance Block]
-        H --> K[SQL Output]
-        I --> L[Refusal Explanation]
-        J --> M[Blocked Explanation]
+        G -->|High trust| H["SQL<br/>Generation"]
+        G -->|Low confidence / ambiguity| I["Safe<br/>Refusal"]
+        G -->|Policy risk| J["Governance<br/>Block"]
+        H --> K["SQL<br/>Output"]
+        I --> L["Refusal<br/>Explanation"]
+        J --> M["Blocked<br/>Explanation"]
     end
 
     classDef reasoning fill:#c9dcff,stroke:#89a9e8,stroke-width:2px,color:#24324d,rx:8px,ry:8px;
@@ -420,17 +420,17 @@ That distinction is the foundation of this architecture.
 }}%%
 flowchart LR
     subgraph C1["Conventional Pipeline"]
-        A[Conventional SQL] --> B[Schema Retrieval]
-        B --> C[LLM SQL Generation]
-        C --> D[Unchecked Risk]
+        A["Conventional SQL"] --> B["Schema<br/>Retrieval"]
+        B --> C["LLM SQL<br/>Generation"]
+        C --> D["Unchecked<br/>Risk"]
     end
 
     subgraph C2["Trust-Aware Pipeline"]
-        E[This System] --> F[Metadata Reasoning]
-        F --> G[Governance + Confidence]
+        E["This System"] --> F["Metadata<br/>Reasoning"]
+        F --> G["Governance +<br/>Confidence"]
         G --> H{Should SQL be generated?}
-        H -->|Yes| I[Trusted SQL]
-        H -->|No| J[Refuse or Block]
+        H -->|Yes| I["Trusted SQL"]
+        H -->|No| J["Refuse or Block"]
     end
 
     classDef conventional fill:#d8deea,stroke:#98a6bf,stroke-width:2px,color:#303948,rx:8px,ry:8px;
