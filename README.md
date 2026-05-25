@@ -207,10 +207,11 @@ Each failure produces a structured explanation surfaced in the UI and included i
 %%{init: {
   "theme": "base",
   "themeVariables": {
-    "background": "#0f172a",
-    "primaryTextColor": "#eef2ff",
-    "secondaryTextColor": "#e8eefb",
-    "lineColor": "#a7b7d6",
+    "background": "#ffffff",
+    "primaryTextColor": "#24324d",
+    "secondaryTextColor": "#3c4d6b",
+    "lineColor": "#8fa4c7",
+    "edgeLabelBackground": "#ffffff",
     "fontFamily": "Segoe UI, Arial, sans-serif"
   },
   "flowchart": {
@@ -248,7 +249,7 @@ flowchart TD
     classDef refusal fill:#ffe8b8,stroke:#d8b065,stroke-width:2.5px,color:#5b460f,rx:8px,ry:8px;
     classDef blocked fill:#f6c8d1,stroke:#d78c9a,stroke-width:2.5px,color:#5a2430,rx:8px,ry:8px;
     classDef neutral fill:#ddd8ff,stroke:#9ca5e7,stroke-width:2px,color:#2d3158,rx:8px,ry:8px;
-    classDef group fill:#151d30,stroke:#5d6b86,stroke-width:1.5px,color:#d8e1ef;
+    classDef group fill:#f7f9ff,stroke:#c5d0e6,stroke-width:1.5px,color:#43526d;
 
     class A neutral;
     class B,C,D,E reasoning;
@@ -259,7 +260,7 @@ flowchart TD
     class J,M blocked;
     class P,T,O group;
 
-    linkStyle default stroke:#a7b7d6,stroke-width:2px;
+    linkStyle default stroke:#8fa4c7,stroke-width:2px;
     linkStyle 5 stroke:#68b7a2,stroke-width:3px;
     linkStyle 6 stroke:#d8b065,stroke-width:3px;
     linkStyle 7 stroke:#d78c9a,stroke-width:3px;
@@ -404,10 +405,11 @@ That distinction is the foundation of this architecture.
 %%{init: {
   "theme": "base",
   "themeVariables": {
-    "background": "#0f172a",
-    "primaryTextColor": "#eef2ff",
-    "secondaryTextColor": "#e8eefb",
-    "lineColor": "#a7b7d6",
+    "background": "#ffffff",
+    "primaryTextColor": "#24324d",
+    "secondaryTextColor": "#3c4d6b",
+    "lineColor": "#8fa4c7",
+    "edgeLabelBackground": "#ffffff",
     "fontFamily": "Segoe UI, Arial, sans-serif"
   },
   "flowchart": {
@@ -438,7 +440,7 @@ flowchart LR
     classDef decision fill:#b9c8f4,stroke:#738ccc,stroke-width:3px,color:#1f2943;
     classDef trustedOutcome fill:#bee9df,stroke:#68b7a2,stroke-width:2.5px,color:#173730,rx:8px,ry:8px;
     classDef blockedOutcome fill:#ffe8b8,stroke:#d8b065,stroke-width:2.5px,color:#5b460f,rx:8px,ry:8px;
-    classDef group fill:#151d30,stroke:#5d6b86,stroke-width:1.5px,color:#d8e1ef;
+    classDef group fill:#f7f9ff,stroke:#c5d0e6,stroke-width:1.5px,color:#43526d;
 
     class A,B,C conventional;
     class D conventionalRisk;
@@ -449,7 +451,7 @@ flowchart LR
     class J blockedOutcome;
     class C1,C2 group;
 
-    linkStyle default stroke:#a7b7d6,stroke-width:2px;
+    linkStyle default stroke:#8fa4c7,stroke-width:2px;
     linkStyle 2 stroke:#d28f99,stroke-width:3px;
     linkStyle 6 stroke:#68b7a2,stroke-width:3px;
     linkStyle 7 stroke:#d8b065,stroke-width:3px;
