@@ -12,6 +12,14 @@ Unlike conventional RAG SQL systems, this platform separates metadata reasoning,
 
 > **This is a research-grade prototype, not a production database gateway.**
 
+## Paper
+
+Read the practitioner paper:
+
+<a href="./article.pdf" target="_blank" rel="noopener noreferrer"><strong>Open Paper (PDF)</strong></a>
+
+GitHub will usually open the PDF in the browser. From there, it can be downloaded directly from the PDF viewer.
+
 ---
 
 ## Live Demo

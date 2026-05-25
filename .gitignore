@@ -19,6 +19,11 @@ chroma_store/
 *.log
 streamlit.log
 streamlit.err.log
+*.aux
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
 
 # Old prototype data files (replaced by data/sample_manifest.json)
 data/metadata.csv
